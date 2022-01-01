@@ -1,25 +1,31 @@
-import logo from './logo.svg';
-import './App.css';
+import React from 'react';
+import Router from './Router';
+import CartsMenu from './components/CartsMenu';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+import { useSpring, animated } from 'react-spring';
+
+const App = () => {
+    const props = useSpring({
+        from: {opacity: 0},
+        to: {opacity: 1},
+        config: {
+            duration: 800
+        }
+    })
+    return (
+        <>
+            <div className='p-6 h-screen'>
+                <animated.div
+                    style={props}
+                    className='container flex flex-row items-stretch mx-auto
+                    h-full rounded-md p-6'>
+                        
+                    <CartsMenu />
+                    <Router />
+                </animated.div>
+            </div>
+        </>
+    )
 }
 
 export default App;
