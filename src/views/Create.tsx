@@ -1,23 +1,24 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
-import { addCart, save } from '../store/feature/cartSlice';
+import { useAppDispatch } from '../app/hooks';
+import { addCart, save } from '../feature/cartSlice';
 
 import { BiError } from 'react-icons/bi';
 
 import Modal from '../components/utils/Modal';
 
 const Create = () => {
-    const inputRef = useRef();
+    const inputRef = useRef<HTMLInputElement>(null);
     useEffect(() => {
-        inputRef.current.focus();
+        if (inputRef && inputRef.current)
+            inputRef.current.focus();
     }, [])
 
-    const [error, setError] = useState(``);
-    const [unfilteredName, setUnfilteredName] = useState(``);
-    const [filteredName, setFilteredName] = useState(``);
+    const [error, setError] = useState<string>(``);
+    const [unfilteredName, setUnfilteredName] = useState<string>(``);
+    const [filteredName, setFilteredName] = useState<string>(``);
     const navigate = useNavigate();
-    const dispatch = useDispatch();
+    const dispatch = useAppDispatch();
     const submitEvent = () => {
         const action = addCart(filteredName);
         console.log(action)
@@ -27,9 +28,9 @@ const Create = () => {
         navigate(`/cart/${action.payload._id}`);
     }
     useEffect(() => {
-        if(unfilteredName.length > 32)
+        if (unfilteredName.length > 32)
             setError(`Size of the name cannot exceed 32 character limit.`);
-        else{
+        else {
             setFilteredName(unfilteredName);
             setError(``);
         }
@@ -39,7 +40,7 @@ const Create = () => {
             <h2>Create a new Cart</h2>
             {error &&
                 <span className='flex-center mb-10 border-red-400 border-[1px] rounded bg-red-200 w-full px-2 py-1'>
-                    <BiError/>
+                    <BiError />
                     <span className='ml-2'>{error}</span>
                 </span>
             }

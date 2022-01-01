@@ -1,8 +1,9 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { FC, ChangeEvent, useState, useRef, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 
-import { useDispatch } from 'react-redux';
-import { removeItem, incItem, decItem, save, editItem } from '../store/feature/cartSlice';
+import { useAppDispatch } from '../app/hooks';
+import { removeItem, incItem, decItem, save, editItem } from '../feature/cartSlice';
+import { I_Item } from '../global';
 
 import moment from 'moment';
 
@@ -13,22 +14,28 @@ import Counter from './utils/Counter';
 
 import Tooltip from './utils/Tooltip';
 
-const Item = ({item: {_id, name, cost, dateAdded, quantity}, index, dndDisabled}) => {
-    const dispatch = useDispatch();
+interface props {
+    item: I_Item,
+    index: number,
+    dndDisabled: boolean
+}
+
+const Item: FC<props> = ({ item: { _id, name, cost, dateAdded, quantity }, index, dndDisabled }) => {
+    const dispatch = useAppDispatch();
     const { cartId } = useParams();
 
-    const inputRef = useRef();
+    const inputRef = useRef<HTMLInputElement>(null);
 
     const [editing, setEditing] = useState(false);
-    const [filteredName, setFilteredName] = useState(name);
-    const [filteredCost, setFilteredCost] = useState(cost);
-    const [unfilteredName, setUnfilteredName] = useState(name);
-    const [unfilteredCost, setUnfilteredCost] = useState(cost);
+    const [filteredName, setFilteredName] = useState<string>(name);
+    const [filteredCost, setFilteredCost] = useState<string>(`` + cost);
+    const [unfilteredName, setUnfilteredName] = useState<string>(name);
+    const [unfilteredCost, setUnfilteredCost] = useState<string>(`` + cost);
 
-    const changeNameHandler = e => {
+    const changeNameHandler = (e: ChangeEvent<HTMLInputElement>) => {
         setUnfilteredName(e.target.value);
     }
-    const changeCostHandler = e => {
+    const changeCostHandler = (e: ChangeEvent<HTMLInputElement>) => {
         setUnfilteredCost(e.target.value);
     }
     const deleteHandler = () => {
@@ -53,20 +60,21 @@ const Item = ({item: {_id, name, cost, dateAdded, quantity}, index, dndDisabled}
         dispatch(save());
     }
     useEffect(() => {
-        if(editing)
+        if (editing && inputRef && inputRef.current)
             inputRef.current.focus();
     }, [editing])
     useEffect(() => {
-        if(unfilteredName.length <= 32)
+        if (unfilteredName.length <= 32)
             setFilteredName(unfilteredName);
     }, [unfilteredName])
     useEffect(() => {
-        if(/^[0-9]*(\.[0-9]*)?$/.test(unfilteredCost))
+        if (/^[0-9]*(\.[0-9]*)?$/.test(unfilteredCost))
             setFilteredCost(unfilteredCost);
     }, [unfilteredCost])
     return (
         <DraggableItem draggableId={_id} dndDisabled={dndDisabled} index={index}>
-                <span className={`icons ml-0 ${dndDisabled ?`cursor-not-allowed`: `cursor-grab`}`}>
+            <div>
+                <span className={`icons ml-0 ${dndDisabled ? `cursor-not-allowed` : `cursor-grab`}`}>
                     <Tooltip content={`drag ${dndDisabled ? `(disabled)` : ``}`}>
                         <BiGridVertical />
                     </Tooltip>
@@ -94,7 +102,7 @@ const Item = ({item: {_id, name, cost, dateAdded, quantity}, index, dndDisabled}
                 <Counter initialValue={quantity} onInc={incHandler} onDec={decHandler}
                     className='mx-4' />
                 <span className='w-24 text-xl text-center inline-block'>
-                    {(quantity*cost).toFixed(2)}
+                    {(quantity * cost).toFixed(2)}
                 </span>
                 <span className='icons-r'>
                     {editing ?
@@ -110,6 +118,7 @@ const Item = ({item: {_id, name, cost, dateAdded, quantity}, index, dndDisabled}
                         <BiTrash className='trash' onClick={deleteHandler} />
                     </Tooltip>
                 </span>
+            </div>
         </DraggableItem>
     )
 }

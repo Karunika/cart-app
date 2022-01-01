@@ -10,10 +10,9 @@ const Router = () => {
             <Routes>
                 <Route path='/' element={<Outlet />}>
                     <Route path='create' element={<Create />} />
-                    <Route path='cart'>
-                        <Route path='' exact element={<Navigate to='/' />} />
-                        <Route path=':cartId'>
-                            <Route path='' element={<Cart />} />
+                    <Route path='cart' element={<Outlet />}>
+                        <Route path='' element={<Navigate to='/' />} />
+                        <Route path=':cartId' element={<Cart />}>
                             <Route path='add' element={<AddItem />} />
                         </Route>
                     </Route>

@@ -1,18 +1,23 @@
-import React from 'react';
-import { useDispatch } from 'react-redux';
-import { refresh, save } from '../../store/feature/cartSlice';
+import React, { FC, Dispatch, SetStateAction } from 'react';
+import { useAppDispatch } from '../../app/hooks';
+import { refresh, save } from '../../feature/cartSlice';
 
 import { BiSave, BiMove } from 'react-icons/bi';
 
 import Tooltip from './Tooltip';
 
-const DndEditTools = ({ editingMode, setEditingMode }) => {
-    const dispatch = useDispatch();
-    const editSaveClickHandler = e => {
-        if(editingMode) dispatch(save());
+interface props {
+    editingMode: boolean,
+    setEditingMode: Dispatch<SetStateAction<boolean>>
+}
+
+const DndEditTools: FC<props> = ({ editingMode, setEditingMode }) => {
+    const dispatch = useAppDispatch();
+    const editSaveClickHandler = () => {
+        if (editingMode) dispatch(save());
         setEditingMode(prev => !prev);
     }
-    const discardClickHandler = e => {
+    const discardClickHandler = () => {
         dispatch(refresh());
         setEditingMode(false);
     }

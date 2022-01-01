@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import { useSelector } from 'react-redux';
-import { moveItem } from '../store/feature/cartSlice';
+import React, { FC, useState } from 'react';
+import { moveItem } from '../feature/cartSlice';
+import { useAppSelector } from '../app/hooks';
 
 import { BiPlus } from 'react-icons/bi';
 
@@ -10,13 +10,17 @@ import Item from './Item';
 import Header from './layouts/Header';
 import DroppablerDiv from './utils/DroppablerDiv';
 
-const CartWrapper = ({ cartId }) => {
+interface props {
+    cartId: string
+}
+
+const CartWrapper: FC<props> = ({ cartId }) => {
     const [editingMode, setEditingMode] = useState(false);
 
-    const cart = useSelector(store => store.cart.carts[cartId]);
+    const cart = useAppSelector(store => store.cart.carts[cartId]);
     const { itemsSeq, items } = cart;
 
-    const dispatchFunc = () => ([a, b]) => moveItem([cartId, [a, b]]);
+    const dispatchFunc = () => ([a, b]: [string, string]) => moveItem([cartId, [a, b]]);
 
     const HeadingRow = () => {
         const cl = `text-slate-500 text-center block w-24`;
@@ -34,35 +38,37 @@ const CartWrapper = ({ cartId }) => {
     return (
         <div className='flex flex-col items-stretch h-full w-2/3 ml-12'>
             <Header>
-                <h1 className='text-4xl flex-1 text-left truncate cursor-default' data-tip={cart.name}>{cart.name}</h1>
-                <span className='icons-r'>
-                    <DndEditTools editingMode={editingMode}
-                        setEditingMode={setEditingMode} />
-                    <Button to='add' Icon={BiPlus} text='New Item' />
-                </span>
+                <>
+                    <h1 className='text-4xl flex-1 text-left truncate cursor-default' data-tip={cart.name}>{cart.name}</h1>
+                    <span className='icons-r'>
+                        <DndEditTools editingMode={editingMode}
+                            setEditingMode={setEditingMode} />
+                        <Button to='add' Icon={BiPlus} text='New Item' />
+                    </span>
+                </>
             </Header>
 
             <DroppablerDiv dispatchFunc={dispatchFunc()}
                 droppableId={cartId} isDropDisabled={!editingMode}>
-                
+
 
                 {!itemsSeq.length ? `This cart is empty.` :
                     <>
                         <HeadingRow />
 
-                        {itemsSeq.map((_id, i) => (
+                        {itemsSeq.map((_id: string, i: number) => (
 
-                            <Item item={items[_id]} index={i} key={_id} dndDisabled={!editingMode} /> 
+                            <Item item={items[_id]} index={i} key={_id} dndDisabled={!editingMode} />
 
                         ))}
                     </>
                 }
-                
+
             </DroppablerDiv>
 
             <footer className='flex-center justify-between pt-4'>
                 <span className='flex flex-row items-end h-full'>
-                    {itemsSeq.length} {itemsSeq.length <= 1 ? `item` : `items` }
+                    {itemsSeq.length} {itemsSeq.length <= 1 ? `item` : `items`}
                 </span>
                 <span className='mr-4'>
                     <span className='text-2xl'>Grand Total: </span>

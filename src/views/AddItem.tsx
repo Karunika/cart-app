@@ -1,7 +1,7 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { ChangeEvent, useState, useRef, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { addItem, save } from '../store/feature/cartSlice';
+import { addItem, save } from '../feature/cartSlice';
 
 import { BiError } from 'react-icons/bi';
 
@@ -9,54 +9,55 @@ import Modal from '../components/utils/Modal';
 import Counter from '../components/utils/Counter';
 
 const AddItem = () => {
-    const inputRef = useRef();
+    const inputRef = useRef<HTMLInputElement>(null);
     useEffect(() => {
-        inputRef.current.focus();
+        if (inputRef && inputRef.current)
+            inputRef.current.focus();
     }, [])
-    const [unfilteredName, setUnfilteredName] = useState(``);
-    const [filteredName, setFilteredName] = useState(``);
-    const [unfilteredCost, setUnfilteredCost] = useState(``);
-    const [filteredCost, setFilteredCost] = useState(``);
-    const [quantity, setQuantity] = useState(1);
-    const [error, setError] = useState(``);
+    const [unfilteredName, setUnfilteredName] = useState<string>(``);
+    const [filteredName, setFilteredName] = useState<string>(``);
+    const [unfilteredCost, setUnfilteredCost] = useState<string>(``);
+    const [filteredCost, setFilteredCost] = useState<string>(``);
+    const [quantity, setQuantity] = useState<number>(1);
+    const [error, setError] = useState<string>(``);
 
     const { cartId } = useParams();
     const dispatch = useDispatch();
 
-    const submitEvent = e => {
+    const submitEvent = () => {
         dispatch(addItem([cartId, {
             name: filteredName, cost: +filteredCost, quantity: +quantity
         }]));
         dispatch(save());
         setUnfilteredName(``);
-        setUnfilteredCost(0);
+        setUnfilteredCost(`0`);
         setQuantity(1);
     }
-    const changeNameHandler = e => {
+    const changeNameHandler = (e: ChangeEvent<HTMLInputElement>) => {
         setUnfilteredName(e.target.value);
     }
-    const changeCostHandler = e => {
+    const changeCostHandler = (e: ChangeEvent<HTMLInputElement>) => {
         setUnfilteredCost(e.target.value)
     }
     const incQuantity = () => {
-        setQuantity(prev => prev+1);
+        setQuantity(prev => prev + 1);
     }
     const decQuantity = () => {
-        setQuantity(prev => prev-1);
+        setQuantity(prev => prev - 1);
     }
     useEffect(() => {
-        if(unfilteredName.length > 32)
+        if (unfilteredName.length > 32)
             setError(`Size of the name cannot exceed 32 character limit.`);
-        else{
+        else {
             setFilteredName(unfilteredName);
             setError(``);
         }
     }, [unfilteredName])
     useEffect(() => {
-        if(/^[0-9]*(\.[0-9]*)?$/.test(unfilteredCost)){
+        if (/^[0-9]*(\.[0-9]*)?$/.test(unfilteredCost)) {
             setFilteredCost(unfilteredCost);
             setError(``);
-        }else
+        } else
             setError(`Invalid Cost Input. Only floats or integers allowed.`);
     }, [unfilteredCost])
     return (
@@ -64,7 +65,7 @@ const AddItem = () => {
             <h2>Add a new Item</h2>
             {error &&
                 <span className='flex-center mb-10 border-red-400 border-[1px] rounded bg-red-200 w-full px-2 py-1'>
-                    <BiError/>
+                    <BiError />
                     <span className='ml-2'>{error}</span>
                 </span>
             }
@@ -98,7 +99,7 @@ const AddItem = () => {
                 </label>
                 <span className='ml-4'>
                     <Counter initialValue={quantity}
-                        onInc={incQuantity} onDec={decQuantity}/>
+                        onInc={incQuantity} onDec={decQuantity} />
                 </span>
             </div>
         </Modal>

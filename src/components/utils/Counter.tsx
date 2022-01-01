@@ -1,13 +1,22 @@
-import React, { useState } from 'react';
+import React, { FC, useState } from 'react';
 
-const Counter = ({ initialValue, onInc, onDec, min = 0, max = 256, className }) => {
+interface props {
+    initialValue: number,
+    onInc: () => void,
+    onDec: () => void,
+    min?: number,
+    max?: number,
+    className?: string
+}
+
+const Counter: FC<props> = ({ initialValue, onInc, onDec, min = 0, max = 256, className }) => {
     const [counter, setCounter] = useState(+initialValue);
     const incHandler = () => {
-        setCounter(prev => prev+1);
+        setCounter(prev => prev + 1);
         onInc();
     }
     const decHandler = () => {
-        setCounter(prev => prev-1);
+        setCounter(prev => prev - 1);
         onDec();
     }
     return (
@@ -21,7 +30,7 @@ const Counter = ({ initialValue, onInc, onDec, min = 0, max = 256, className }) 
                     value={counter}
                     className='h-full outline-0 px-2 text-lg w-10 text-center bg-slate-0'
                     readOnly={true}
-                    />
+                />
                 <button type='reset'
                     className='bg-cyan-50 border-l-[1px] border-l-cyan-500 h-full px-3 font-mono text-lg'
                     onClick={incHandler}

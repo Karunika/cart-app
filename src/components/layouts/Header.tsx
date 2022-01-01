@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { FC } from 'react';
 
-const Header = ({ children }) => {
+const Header: FC = ({ children }) => {
     return (
         <header className='flex-center mb-6 justify-between'>
             {children}

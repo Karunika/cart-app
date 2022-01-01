@@ -1,7 +1,15 @@
-import React from 'react';
+import React, { FC } from 'react';
 import { Link } from 'react-router-dom';
 
-const Button = ({ to, Icon, text}) => {
+import type { IconType } from 'react-icons';
+
+interface props {
+    to: string,
+    Icon: IconType,
+    text: string
+}
+
+const Button: FC<props> = ({ to, Icon, text }) => {
     return (
         <Link to={to}>
             <button className='px-4 py-1 rounded ml-4 border-[1px] hover:shadow-lg

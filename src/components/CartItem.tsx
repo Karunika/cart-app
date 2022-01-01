@@ -1,9 +1,10 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { FC, useEffect, useRef, useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import DraggableItem from './utils/DraggableItem';
 
 import { useDispatch } from 'react-redux';
-import { removeCart, editCart, save } from '../store/feature/cartSlice';
+import { removeCart, editCart, save } from '../feature/cartSlice';
+import { I_Cart } from '../global';
 
 import moment from 'moment';
 
@@ -11,15 +12,23 @@ import { BiGridVertical, BiRename, BiCheck, BiTrash } from 'react-icons/bi';
 
 import Tooltip from './utils/Tooltip';
 
-const CartItem = ({cart: {_id, name, dateCreated, lastModified, itemsSeq}, index, dndDisabled, fs}) => {
+interface props {
+    cart: I_Cart,
+    index: number,
+    dndDisabled: boolean,
+    fs: boolean
+}
+
+const CartItem: FC<props> = ({ cart: { _id, name, dateCreated, lastModified, itemsSeq }, index, dndDisabled, fs }) => {
     const dispatch = useDispatch();
+
+    const inputRef = useRef<HTMLInputElement>(null);
 
     const [filteredName, setFilteredName] = useState(name);
     const [unfilteredName, setUnfilteredName] = useState(name);
     const [editing, setEditing] = useState(false);
-    const inputRef = useRef();
 
-    const deleteHandler = e => {
+    const deleteHandler = () => {
         dispatch(removeCart(_id));
         dispatch(save());
     }
@@ -32,11 +41,11 @@ const CartItem = ({cart: {_id, name, dateCreated, lastModified, itemsSeq}, index
         dispatch(save());
     }
     useEffect(() => {
-        if(editing)
+        if (editing && inputRef && inputRef.current)
             inputRef.current.focus();
     }, [editing])
     useEffect(() => {
-        if(unfilteredName.length <= 32)
+        if (unfilteredName.length <= 32)
             setFilteredName(unfilteredName);
     }, [unfilteredName])
     return (
@@ -51,7 +60,7 @@ const CartItem = ({cart: {_id, name, dateCreated, lastModified, itemsSeq}, index
                     </span>
                 }
                 <NavLink to={editing || !dndDisabled ? `#` : `cart/${_id}`}
-                        className={`w-full ${!dndDisabled ? `pointer-events-none` : ``}`}
+                    className={`w-full ${!dndDisabled ? `pointer-events-none` : ``}`}
                 >
                     <input
                         className={`w-full text-xl bg-transparent focus:outline-0 bg-slate-200 disabled:bg-transparent p-1
@@ -63,7 +72,7 @@ const CartItem = ({cart: {_id, name, dateCreated, lastModified, itemsSeq}, index
                     />
                 </NavLink>
             </span>
-            {fs && 
+            {fs &&
                 <span className='flex flex-row'>
                     <span className='flex-center cursor-default text-sm'>
                         <Tooltip content={moment(dateCreated, `x`).calendar()}>

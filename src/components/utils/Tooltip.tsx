@@ -1,20 +1,26 @@
-import React from 'react';
+import React, { FC } from 'react';
 import { useSpring, animated } from 'react-spring';
 
 import Tippy from '@tippyjs/react';
+import { Instance } from 'tippy.js';
 
-const Tooltip = ({children , content}) => {
-    const [style, animate] = useSpring(() => ({opacity: 0}));
+interface props {
+    children: JSX.Element,
+    content: string
+}
+
+const Tooltip: FC<props> = ({ children, content }) => {
+    const [style, animate] = useSpring(() => ({ opacity: 0 }));
 
     const onMount = () => {
         animate({ opacity: 0.6 })
     }
-    function onHide({ unmount }) {
-      animate({
-        opacity: 0,
-        onRest: unmount,
-        config: { clamp: true }
-      });
+    const onHide = ({ unmount }: Instance) => {
+        animate({
+            opacity: 0,
+            onRest: unmount,
+            config: { clamp: true }
+        });
     }
     return (
         <Tippy content={

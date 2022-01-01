@@ -1,16 +1,21 @@
-import React from 'react';
+import React, { FC, SyntheticEvent, MouseEvent } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 
-const Modal = ({ children, submitEvent, keyword, defaultNavigate = true }) => {
+interface props {
+    submitEvent: () => void,
+    keyword: string,
+    defaultNavigate?: boolean
+}
+const Modal: FC<props> = ({ children, submitEvent, keyword, defaultNavigate = true }) => {
     const navigate = useNavigate();
-    const submitHandler = e => {
+    const submitHandler = (e: SyntheticEvent) => {
         e.preventDefault();
         submitEvent();
-        if(defaultNavigate)
+        if (defaultNavigate)
             navigate(`../`);
     }
-    const cancel = e => {
-        if(e.target === e.currentTarget)
+    const cancel = (e: MouseEvent) => {
+        if (e.target === e.currentTarget)
             navigate(`../`);
     }
     return (
@@ -25,7 +30,7 @@ const Modal = ({ children, submitEvent, keyword, defaultNavigate = true }) => {
                         <Link to='../'>
                             <button type='reset'
                                 className='px-4 py-1 text-red-500 hover:underline'
-                                >Cancel</button>
+                            >Cancel</button>
                         </Link>
                         <button type='submit'
                             className='px-4 py-1 rounded ml-1
