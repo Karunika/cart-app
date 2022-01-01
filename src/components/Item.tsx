@@ -73,52 +73,50 @@ const Item: FC<props> = ({ item: { _id, name, cost, dateAdded, quantity }, index
     }, [unfilteredCost])
     return (
         <DraggableItem draggableId={_id} dndDisabled={dndDisabled} index={index}>
-            <div>
-                <span className={`icons ml-0 ${dndDisabled ? `cursor-not-allowed` : `cursor-grab`}`}>
-                    <Tooltip content={`drag ${dndDisabled ? `(disabled)` : ``}`}>
-                        <BiGridVertical />
-                    </Tooltip>
-                </span>
-                <span className='flex-center flex-1'>
-                    <span className='w-full flex flex-col'>
-                        <input
-                            className={`w-full text-xl bg-transparent focus:outline-0 focus:bg-slate-200 p-1
+            <span className={`icons ml-0 ${dndDisabled ? `cursor-not-allowed` : `cursor-grab`}`}>
+                <Tooltip content={`drag ${dndDisabled ? `(disabled)` : ``}`}>
+                    <BiGridVertical />
+                </Tooltip>
+            </span>
+            <span className='flex-center flex-1'>
+                <span className='w-full flex flex-col'>
+                    <input
+                        className={`w-full text-xl bg-transparent focus:outline-0 focus:bg-slate-200 p-1
                                 ${!dndDisabled ? `pointer-events-none` : ``}`}
-                            ref={inputRef}
-                            onChange={changeNameHandler}
-                            value={filteredName}
-                            disabled={!editing}
-                        />
-                        <span className='text-slate-300 cursor-default select-none text-sm'>
-                            {moment(dateAdded, `x`).calendar()}
-                        </span>
+                        ref={inputRef}
+                        onChange={changeNameHandler}
+                        value={filteredName}
+                        disabled={!editing}
+                    />
+                    <span className='text-slate-300 cursor-default select-none text-sm'>
+                        {moment(dateAdded, `x`).calendar()}
                     </span>
                 </span>
-                <input onChange={changeCostHandler}
-                    value={filteredCost}
-                    disabled={!editing}
-                    className='w-24 text-xl text-center bg-transparent focus:outline-0 focus:bg-slate-200'
-                />
-                <Counter initialValue={quantity} onInc={incHandler} onDec={decHandler}
-                    className='mx-4' />
-                <span className='w-24 text-xl text-center inline-block'>
-                    {(quantity * cost).toFixed(2)}
-                </span>
-                <span className='icons-r'>
-                    {editing ?
-                        <Tooltip content='save'>
-                            <BiCheck onClick={saveClickHandler} />
-                        </Tooltip>
-                        :
-                        <Tooltip content='edit'>
-                            <BiPencil onClick={editClickHandler} />
-                        </Tooltip>
-                    }
-                    <Tooltip content='delete'>
-                        <BiTrash className='trash' onClick={deleteHandler} />
+            </span>
+            <input onChange={changeCostHandler}
+                value={filteredCost}
+                disabled={!editing}
+                className='w-24 text-xl text-center bg-transparent focus:outline-0 focus:bg-slate-200'
+            />
+            <Counter initialValue={quantity} onInc={incHandler} onDec={decHandler}
+                className='mx-4' />
+            <span className='w-24 text-xl text-center inline-block'>
+                {(quantity * cost).toFixed(2)}
+            </span>
+            <span className='icons-r'>
+                {editing ?
+                    <Tooltip content='save'>
+                        <BiCheck onClick={saveClickHandler} />
                     </Tooltip>
-                </span>
-            </div>
+                    :
+                    <Tooltip content='edit'>
+                        <BiPencil onClick={editClickHandler} />
+                    </Tooltip>
+                }
+                <Tooltip content='delete'>
+                    <BiTrash className='trash' onClick={deleteHandler} />
+                </Tooltip>
+            </span>
         </DraggableItem>
     )
 }
