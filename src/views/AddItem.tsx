@@ -14,10 +14,8 @@ const AddItem = () => {
         if (inputRef && inputRef.current)
             inputRef.current.focus();
     }, [])
-    const [unfilteredName, setUnfilteredName] = useState<string>(``);
-    const [filteredName, setFilteredName] = useState<string>(``);
-    const [unfilteredCost, setUnfilteredCost] = useState<string>(``);
-    const [filteredCost, setFilteredCost] = useState<string>(``);
+    const [name, setName] = useState<string>(``);
+    const [cost, setCost] = useState<string>(``);
     const [quantity, setQuantity] = useState<number>(1);
     const [error, setError] = useState<string>(``);
 
@@ -26,18 +24,28 @@ const AddItem = () => {
 
     const submitEvent = () => {
         dispatch(addItem([cartId, {
-            name: filteredName, cost: +filteredCost, quantity: +quantity
+            name, cost: +cost, quantity: +quantity
         }]));
         dispatch(save());
-        setUnfilteredName(``);
-        setUnfilteredCost(`0`);
+        setName(``);
+        setCost(`0`);
         setQuantity(1);
     }
     const changeNameHandler = (e: ChangeEvent<HTMLInputElement>) => {
-        setUnfilteredName(e.target.value);
+        if (e.target.value.length > 32) {
+            setError(`Size of the name cannot exceed 32 character limit.`);
+        } else {
+            setName(e.target.value);
+            setError(``);
+        }
     }
     const changeCostHandler = (e: ChangeEvent<HTMLInputElement>) => {
-        setUnfilteredCost(e.target.value)
+        if (/^[0-9]*(\.[0-9]*)?$/.test(e.target.value)) {
+            setCost(e.target.value);
+            setError(``);
+        } else {
+            setError(`Invalid Cost Input. Only floats or integers allowed.`);
+        }
     }
     const incQuantity = () => {
         setQuantity(prev => prev + 1);
@@ -45,21 +53,6 @@ const AddItem = () => {
     const decQuantity = () => {
         setQuantity(prev => prev - 1);
     }
-    useEffect(() => {
-        if (unfilteredName.length > 32)
-            setError(`Size of the name cannot exceed 32 character limit.`);
-        else {
-            setFilteredName(unfilteredName);
-            setError(``);
-        }
-    }, [unfilteredName])
-    useEffect(() => {
-        if (/^[0-9]*(\.[0-9]*)?$/.test(unfilteredCost)) {
-            setFilteredCost(unfilteredCost);
-            setError(``);
-        } else
-            setError(`Invalid Cost Input. Only floats or integers allowed.`);
-    }, [unfilteredCost])
     return (
         <Modal submitEvent={submitEvent} keyword='add'>
             <h2>Add a new Item</h2>
@@ -72,7 +65,7 @@ const AddItem = () => {
             <div className='flex-center relative h-10 w-full input-component mb-6'>
                 <input type='text'
                     ref={inputRef}
-                    value={filteredName}
+                    value={name}
                     name='name'
                     onChange={changeNameHandler}
                     className='h-full w-full border-gray-300 border-[2px] px-2 transition-all border-blue
@@ -86,7 +79,7 @@ const AddItem = () => {
             </div>
             <div className='flex-center relative h-10 w-full input-component'>
                 <input type='text'
-                    value={filteredCost}
+                    value={cost}
                     name='cost'
                     onChange={changeCostHandler}
                     className='h-full w-full border-gray-300 border-[2px] px-2 transition-all border-blue

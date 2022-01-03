@@ -27,16 +27,18 @@ const Item: FC<props> = ({ item: { _id, name, cost, dateAdded, quantity }, index
     const inputRef = useRef<HTMLInputElement>(null);
 
     const [editing, setEditing] = useState(false);
-    const [filteredName, setFilteredName] = useState<string>(name);
-    const [filteredCost, setFilteredCost] = useState<string>(`` + cost);
-    const [unfilteredName, setUnfilteredName] = useState<string>(name);
-    const [unfilteredCost, setUnfilteredCost] = useState<string>(`` + cost);
+    const [editableName, setEditableName] = useState<string>(name);
+    const [editableCost, setEditableCost] = useState<string>(`` + cost);
 
     const changeNameHandler = (e: ChangeEvent<HTMLInputElement>) => {
-        setUnfilteredName(e.target.value);
+        setEditableName(e.target.value);
+        if (e.target.value.length <= 32)
+            setEditableName(e.target.value);
     }
     const changeCostHandler = (e: ChangeEvent<HTMLInputElement>) => {
-        setUnfilteredCost(e.target.value);
+        setEditableCost(e.target.value);
+        if (/^[0-9]*(\.[0-9]*)?$/.test(e.target.value))
+            setEditableCost(e.target.value);
     }
     const deleteHandler = () => {
         dispatch(removeItem([cartId, _id]));
@@ -44,7 +46,7 @@ const Item: FC<props> = ({ item: { _id, name, cost, dateAdded, quantity }, index
     }
     const saveClickHandler = () => {
         editClickHandler();
-        dispatch(editItem([cartId, _id, filteredName, +filteredCost]));
+        dispatch(editItem([cartId, _id, editableName, +editableCost]));
         dispatch(save());
     }
     const editClickHandler = () => {
@@ -63,14 +65,6 @@ const Item: FC<props> = ({ item: { _id, name, cost, dateAdded, quantity }, index
         if (editing && inputRef && inputRef.current)
             inputRef.current.focus();
     }, [editing])
-    useEffect(() => {
-        if (unfilteredName.length <= 32)
-            setFilteredName(unfilteredName);
-    }, [unfilteredName])
-    useEffect(() => {
-        if (/^[0-9]*(\.[0-9]*)?$/.test(unfilteredCost))
-            setFilteredCost(unfilteredCost);
-    }, [unfilteredCost])
     return (
         <DraggableItem draggableId={_id} dndDisabled={dndDisabled} index={index}>
             <span className={`icons ml-0 ${dndDisabled ? `cursor-not-allowed` : `cursor-grab`}`}>
@@ -85,7 +79,7 @@ const Item: FC<props> = ({ item: { _id, name, cost, dateAdded, quantity }, index
                                 ${!dndDisabled ? `pointer-events-none` : ``}`}
                         ref={inputRef}
                         onChange={changeNameHandler}
-                        value={filteredName}
+                        value={editableName}
                         disabled={!editing}
                     />
                     <span className='text-slate-300 cursor-default select-none text-sm'>
@@ -94,7 +88,7 @@ const Item: FC<props> = ({ item: { _id, name, cost, dateAdded, quantity }, index
                 </span>
             </span>
             <input onChange={changeCostHandler}
-                value={filteredCost}
+                value={editableCost}
                 disabled={!editing}
                 className='w-24 text-xl text-center bg-transparent focus:outline-0 focus:bg-slate-200'
             />

@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, ChangeEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAppDispatch } from '../app/hooks';
 import { addCart, save } from '../feature/cartSlice';
@@ -15,26 +15,25 @@ const Create = () => {
     }, [])
 
     const [error, setError] = useState<string>(``);
-    const [unfilteredName, setUnfilteredName] = useState<string>(``);
-    const [filteredName, setFilteredName] = useState<string>(``);
+    const [name, setName] = useState<string>(``);
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
-    const submitEvent = () => {
-        const action = addCart(filteredName);
-        console.log(action)
-        dispatch(action);
-        dispatch(save());
-        setUnfilteredName(``);
-        navigate(`/cart/${action.payload._id}`);
-    }
-    useEffect(() => {
-        if (unfilteredName.length > 32)
+    const changeHandler = (e: ChangeEvent<HTMLInputElement>) => {
+        if (e.target.value.length > 32)
             setError(`Size of the name cannot exceed 32 character limit.`);
         else {
-            setFilteredName(unfilteredName);
+            setName(e.target.value);
             setError(``);
         }
-    }, [unfilteredName])
+    }
+    const submitEvent = () => {
+        const action = addCart(name);
+        dispatch(action);
+        dispatch(save());
+        setName(``);
+        navigate(`/cart/${action.payload._id}`);
+    }
+
     return (
         <Modal submitEvent={submitEvent} keyword='create' defaultNavigate={false}>
             <h2>Create a new Cart</h2>
@@ -47,8 +46,8 @@ const Create = () => {
             <div className='flex-center relative h-10 w-full input-component'>
                 <input name='name'
                     ref={inputRef}
-                    value={filteredName}
-                    onChange={e => setUnfilteredName(e.target.value)}
+                    value={name}
+                    onChange={changeHandler}
                     className='h-full w-full border-gray-300 border-[2px] px-2 transition-all border-blue
                             rounded-sm bg-slate-50 focus:border-cyan-500 outline-none'
                     required

@@ -30,7 +30,7 @@
     .icons-r > div > svg, .icons-l > div > svg{
         @apply text-3xl text-slate-300 hover:text-slate-500 cursor-pointer;
     }
-    .icons svg {
+    .icons > div > svg {
         @apply hover:text-slate-300;
     }
     .cart svg{
