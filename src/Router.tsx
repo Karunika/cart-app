@@ -12,7 +12,8 @@ const Router = () => {
                     <Route path='create' element={<Create />} />
                     <Route path='cart' element={<Outlet />}>
                         <Route path='' element={<Navigate to='/' />} />
-                        <Route path=':cartId' element={<Cart />}>
+                        <Route path=':cartId' element={<Outlet />}>
+                            <Route path='' element={<Cart />} />
                             <Route path='add' element={<AddItem />} />
                         </Route>
                     </Route>
