@@ -39,6 +39,10 @@ const CartItem: FC<props> = ({ cart: { _id, name, dateCreated, lastModified, ite
         dispatch(editCart([_id, editableName]));
         dispatch(save());
     }
+    const discardClickHandler = () => {
+        setEditableName(name);
+        editClickHandler();
+    }
     const changeHandler = (e: ChangeEvent<HTMLInputElement>) => {
         if (e.target.value.length < 32)
             setEditableName(e.target.value);
@@ -93,7 +97,7 @@ const CartItem: FC<props> = ({ cart: { _id, name, dateCreated, lastModified, ite
                                     <BiCheck onClick={saveClickHandler} />
                                 </Tooltip>
                                 <Tooltip content='discard'>
-                                    <BiX className='trash' onClick={editClickHandler} />
+                                    <BiX className='trash' onClick={discardClickHandler} />
                                 </Tooltip>
                             </>
                             :
