@@ -20,7 +20,7 @@ const Router = () => {
                 </Route>
             </Routes>
         </>
-    )
-}
+    );
+};
 
 export default Router;

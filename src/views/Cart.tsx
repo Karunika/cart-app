@@ -5,9 +5,7 @@ import CartWrapper from '../components/CartWrapper';
 
 const Cart: FC = () => {
     const { cartId } = useParams();
-    return cartId ? (
-        <CartWrapper cartId={cartId} />
-    ) : <Navigate to='/' />
-}
+    return cartId ? <CartWrapper cartId={cartId} /> : <Navigate to='/' />;
+};
 
 export default Cart;
