@@ -27,7 +27,7 @@ const AddItem = () => {
                 cartId,
                 {
                     name,
-                    cost: +cost,
+                    cost: (+cost).toFixed(2),
                     quantity: +quantity,
                 },
             ])

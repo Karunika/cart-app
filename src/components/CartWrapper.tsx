@@ -30,7 +30,7 @@ const CartWrapper: FC<props> = ({ cartId }) => {
         return (
             <span className='flex-center cursor-default text-sm justify-between mr-24 mb-1'>
                 <span className='text-slate-500 block ml-8'>
-                    Supplement / Date Added
+                    Articles / Date Added
                 </span>
                 <span className='flex-center'>
                     <span className={`${cl}`}>Cost</span>
