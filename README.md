@@ -58,7 +58,7 @@ npm lint:fix
 For more details, see [package.json](package.json).
 
 # Contribute
-`cart-app` is an open source project, and any sort of contributions are welcome and appreciated. Feel free to open issues, report bugs, or make feature requests, I'll try my best to work on them.
+`cart-app` is an open source project, and any sort of contribution is welcome and appreciated. Feel free to open issues, report bugs, or make feature requests, I'll try my best to work on them.
 
 # License
 This project is open source and available under the [MIT License](LICENSE).
