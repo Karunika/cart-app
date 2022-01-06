@@ -9,6 +9,7 @@ import Button from './utils/Button';
 import Item from './Item';
 import Header from './layouts/Header';
 import DroppablerDiv from './utils/DroppablerDiv';
+import Tooltip from './utils/Tooltip';
 
 interface props {
     cartId: string;
@@ -45,12 +46,11 @@ const CartWrapper: FC<props> = ({ cartId }) => {
         <div className='flex flex-col items-stretch h-full w-2/3 ml-12'>
             <Header>
                 <>
-                    <h1
-                        className='text-4xl flex-1 text-left truncate cursor-default'
-                        data-tip={cart.name}
-                    >
-                        {cart.name}
-                    </h1>
+                    <Tooltip content={cart.name}>
+                        <h1 className='text-4xl flex-1 text-left truncate cursor-default'>
+                            {cart.name}
+                        </h1>
+                    </Tooltip>
                     <span className='icons-r'>
                         <DndEditTools
                             editingMode={editingMode}

@@ -60,8 +60,7 @@
 }
 
 .scrollable:hover::-webkit-scrollbar-thumb {
-  /* background-color: #a0a0a5; */
-  background-color: green;
+    background-color: #a0a0a5;
 }
 
 .scrollable::-webkit-scrollbar-thumb:hover {

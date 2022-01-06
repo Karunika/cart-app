@@ -15,4 +15,3 @@ export interface I_Item {
     quantity: number;
     dateAdded: number;
 }
-import { Instance } from 'tippy.js';
