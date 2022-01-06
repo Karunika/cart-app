@@ -24,7 +24,8 @@ The app supports drag and drop allowing vertical sorting of your Carts and the C
 # Setup Development Environment
 ## Clone Repo
 ```bat
-cd clone https://github.com/Karunika/cart-app.git
+git clone https://github.com/Karunika/cart-app.git
+cd cart-app
 ```
 ## Install Dependencies
 ```bat
