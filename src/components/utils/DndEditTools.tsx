@@ -26,7 +26,10 @@ const DndEditTools: FC<props> = ({ editingMode, setEditingMode }) => {
             {editingMode ? (
                 <>
                     <Tooltip content='save'>
-                        <BiSave onClick={editSaveClickHandler} />
+                        <BiSave
+                            className='green'
+                            onClick={editSaveClickHandler}
+                        />
                     </Tooltip>
                     <button
                         onClick={discardClickHandler}

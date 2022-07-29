@@ -4,8 +4,7 @@ import { useParams } from 'react-router-dom';
 import { useAppDispatch, useUnloadCautionPrompt } from '../app/hooks';
 import {
     removeItem,
-    incItem,
-    decItem,
+    // updateQuantity,
     save,
     editItem,
 } from '../feature/cartSlice';
@@ -16,7 +15,7 @@ import moment from 'moment';
 import { BiGridVertical, BiPencil, BiCheck, BiTrash } from 'react-icons/bi';
 
 import DraggableItem from './utils/DraggableItem';
-import Counter from './utils/Counter';
+// import Counter from './utils/Counter';
 
 import Tooltip from './utils/Tooltip';
 
@@ -61,15 +60,17 @@ const Item: FC<props> = ({
     const editClickHandler = () => {
         setEditing(prev => !prev);
     };
-
-    const incHandler = () => {
-        dispatch(incItem([cartId, _id]));
-        dispatch(save());
-    };
-    const decHandler = () => {
-        dispatch(decItem([cartId, _id]));
-        dispatch(save());
-    };
+    // const setQuantity = (q: number) => {
+    //     dispatch(updateQuantity([cartId, _id, q]));
+    // };
+    // const incHandler = () => {
+    //     dispatch(incItem([cartId, _id]));
+    //     dispatch(save());
+    // };
+    // const decHandler = () => {
+    //     dispatch(decItem([cartId, _id]));
+    //     dispatch(save());
+    // };
     useEffect(() => {
         if (editing && inputRef && inputRef.current) inputRef.current.focus();
     }, [editing]);
@@ -110,12 +111,11 @@ const Item: FC<props> = ({
                 disabled={!editing}
                 className='w-24 text-xl text-center bg-transparent focus:outline-0 focus:bg-slate-200'
             />
-            <Counter
-                initialValue={quantity}
-                onInc={incHandler}
-                onDec={decHandler}
+            {/* <Counter
+                counter={quantity}
+                setCounter={setQuantity}
                 className='mx-4'
-            />
+            /> */}
             <span className='w-24 text-xl text-center inline-block'>
                 {(quantity * cost).toFixed(2)}
             </span>
@@ -130,7 +130,7 @@ const Item: FC<props> = ({
                     </Tooltip>
                 )}
                 <Tooltip content='delete'>
-                    <BiTrash className='trash' onClick={deleteHandler} />
+                    <BiTrash className='red' onClick={deleteHandler} />
                 </Tooltip>
             </span>
         </DraggableItem>

@@ -78,7 +78,7 @@ const CartsMenu = () => {
                 dispatchFunc={moveCart}
                 isDropDisabled={!editingMode}
             >
-                {!cartsSeq ? (
+                {!cartsSeq.length ? (
                     `You have no carts.`
                 ) : (
                     <>

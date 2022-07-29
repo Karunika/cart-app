@@ -86,15 +86,21 @@ const cartSlice = createSlice({
             ).toFixed(2);
             state.carts[cartId].items[itemId].cost = newCost;
         },
-        incItem: (state, { payload: [cartId, itemId] }) => {
-            state.carts[cartId].items[itemId].quantity++;
-            state.carts[cartId].budget +=
-                +state.carts[cartId].items[itemId].cost;
-        },
-        decItem: (state, { payload: [cartId, itemId] }) => {
-            state.carts[cartId].items[itemId].quantity--;
+        // incItem: (state, { payload: [cartId, itemId] }) => {
+        //     state.carts[cartId].items[itemId].quantity++;
+        //     state.carts[cartId].budget +=
+        //         +state.carts[cartId].items[itemId].cost;
+        // },
+        // decItem: (state, { payload: [cartId, itemId] }) => {
+        //     state.carts[cartId].items[itemId].quantity--;
+        //     state.carts[cartId].budget -=
+        //         +state.carts[cartId].items[itemId].cost;
+        // },
+        updateQuantity: (state, { payload: [cartId, itemId, quantity] }) => {
             state.carts[cartId].budget -=
-                +state.carts[cartId].items[itemId].cost;
+                +state.carts[cartId].items[itemId].cost *
+                state.carts[cartId].items[itemId].quantity;
+            state.carts[cartId].items[itemId].quantity = quantity;
         },
         removeItem: (state, { payload }) => {
             let [cartId, itemId] = payload;
@@ -137,8 +143,9 @@ export const {
     addItem,
     removeItem,
     editItem,
-    incItem,
-    decItem,
+    // incItem,
+    // decItem,
+    updateQuantity,
     moveItem,
     refresh,
     save,

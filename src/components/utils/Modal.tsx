@@ -30,6 +30,7 @@ const Modal: FC<props> = ({
                 <form
                     onSubmit={submitHandler}
                     className='flex-center flex-col w-full'
+                    autoComplete='off'
                 >
                     {children}
                     <span className='flex-center justify-end mt-6 w-full'>

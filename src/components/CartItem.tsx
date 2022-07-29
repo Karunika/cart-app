@@ -131,11 +131,14 @@ const CartItem: FC<props> = ({
                         {editing ? (
                             <>
                                 <Tooltip content='save'>
-                                    <BiCheck onClick={saveClickHandler} />
+                                    <BiCheck
+                                        className='green'
+                                        onClick={saveClickHandler}
+                                    />
                                 </Tooltip>
                                 <Tooltip content='discard'>
                                     <BiX
-                                        className='trash'
+                                        className='red'
                                         onClick={discardClickHandler}
                                     />
                                 </Tooltip>
@@ -147,7 +150,7 @@ const CartItem: FC<props> = ({
                                 </Tooltip>
                                 <Tooltip content='delete'>
                                     <BiTrash
-                                        className='trash'
+                                        className='red'
                                         onClick={deleteHandler}
                                     />
                                 </Tooltip>

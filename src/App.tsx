@@ -18,7 +18,7 @@ const App = () => {
                 <animated.div
                     style={props}
                     className='container flex flex-row items-stretch mx-auto
-                    h-full rounded-md p-6'
+                    h-full rounded-md p-12 border-[2px]'
                 >
                     <CartsMenu />
                     <Router />

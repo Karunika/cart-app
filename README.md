@@ -49,7 +49,7 @@ npm lint:fix
 
 # Built With
 * [Redux ToolKit](https://redux-toolkit.js.org/)
-* [Redux Router v6](https://reactrouter.com/)
+* [React Router v6](https://reactrouter.com/)
 * [TailwindCSS](https://tailwindcss.com/)
 * [React Icons](https://react-icons.github.io/react-icons)
 * [React Beautiful dnd](https://github.com/atlassian/react-beautiful-dnd)

@@ -6,20 +6,17 @@ import AddItem from './views/AddItem';
 
 const Router = () => {
     return (
-        <>
-            <Routes>
-                <Route path='/' element={<Outlet />}>
-                    <Route path='create' element={<Create />} />
-                    <Route path='cart' element={<Outlet />}>
-                        <Route path='' element={<Navigate to='/' />} />
-                        <Route path=':cartId' element={<Outlet />}>
-                            <Route path='' element={<Cart />} />
-                            <Route path='add' element={<AddItem />} />
-                        </Route>
+        <Routes>
+            <Route path='/' element={<Outlet />}>
+                <Route path='create' element={<Create />} />
+                <Route path='cart' element={<Outlet />}>
+                    <Route index element={<Navigate to='/' />} />
+                    <Route path=':cartId' element={<Cart />}>
+                        <Route path='add' element={<AddItem />} />
                     </Route>
                 </Route>
-            </Routes>
-        </>
+            </Route>
+        </Routes>
     );
 };
 

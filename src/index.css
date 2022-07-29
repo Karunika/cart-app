@@ -42,8 +42,11 @@
     .icons-l > div > svg{
         @apply mr-4;
     }
-    .icons-r svg.trash, .icons-l svg.trash{
+    .icons-r svg.red, .icons-l svg.red{
         @apply text-red-300 hover:text-red-400 !important;
+    }
+    .icons-r svg.green, .icons-l svg.green{
+        @apply text-emerald-400 hover:text-emerald-500 !important;
     }
     button{
         @apply flex-center;

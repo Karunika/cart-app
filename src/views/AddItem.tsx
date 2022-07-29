@@ -6,13 +6,16 @@ import { addItem, save } from '../feature/cartSlice';
 import { BiError } from 'react-icons/bi';
 
 import Modal from '../components/utils/Modal';
+import Input from '../components/utils/Input';
 import Counter from '../components/utils/Counter';
+import Dropdown from '../components/utils/Dropdown';
 
 const AddItem = () => {
     const inputRef = useRef<HTMLInputElement>(null);
     useEffect(() => {
         if (inputRef && inputRef.current) inputRef.current.focus();
     }, []);
+    const [optionVal, setOptionVal] = useState<string>(`piece`);
     const [name, setName] = useState<string>(``);
     const [cost, setCost] = useState<string>(``);
     const [quantity, setQuantity] = useState<number>(1);
@@ -28,7 +31,8 @@ const AddItem = () => {
                 {
                     name,
                     cost: (+cost).toFixed(2),
-                    quantity: +quantity,
+                    quantity: +quantity.toFixed(step(optionVal)[1]),
+                    per: optionVal,
                 },
             ])
         );
@@ -53,12 +57,22 @@ const AddItem = () => {
             setError(`Invalid Cost Input. Only floats or integers allowed.`);
         }
     };
-    const incQuantity = () => {
-        setQuantity(prev => prev + 1);
+
+    const step = (entity: string) => {
+        switch (entity) {
+            case `piece`:
+                return [1, 0];
+            case `kg`:
+                return [0.001, 3];
+            case `liter`:
+                return [0.001, 3];
+            default:
+                return [1, 0];
+        }
     };
-    const decQuantity = () => {
-        setQuantity(prev => prev - 1);
-    };
+    useEffect(() => {
+        setQuantity(step(optionVal)[0]);
+    }, [optionVal]);
     return (
         <Modal submitEvent={submitEvent} keyword='add'>
             <h2>Add a new Item</h2>
@@ -68,48 +82,38 @@ const AddItem = () => {
                     <span className='ml-2'>{error}</span>
                 </span>
             )}
-            <div className='flex-center relative h-10 w-full input-component mb-6'>
-                <input
-                    type='text'
-                    ref={inputRef}
-                    value={name}
-                    name='name'
-                    onChange={changeNameHandler}
-                    className='h-full w-full border-gray-300 border-[2px] px-2 transition-all border-blue
-                            rounded-sm bg-slate-50 focus:border-cyan-500 outline-none'
-                    required
-                />
-                <label
-                    htmlFor='name'
-                    className='absolute left-2 transition-all bg-slate-50 px-1 pointer-events-none'
-                >
-                    Name
-                </label>
-            </div>
-            <div className='flex-center relative h-10 w-full input-component'>
-                <input
-                    type='text'
+            <Input
+                value={name}
+                name='name'
+                onChange={changeNameHandler}
+                label='Name'
+                className='mb-6'
+            />
+            <div className='flex-center mb-6'>
+                <Input
                     value={cost}
                     name='cost'
                     onChange={changeCostHandler}
-                    className='h-full w-full border-gray-300 border-[2px] px-2 transition-all border-blue
-                            rounded-sm bg-slate-50 focus:border-cyan-500 outline-none'
-                    required
+                    label='Cost'
                 />
-                <label
-                    htmlFor='cost'
-                    className='absolute left-2 transition-all bg-slate-50 px-1 pointer-events-none'
-                >
-                    Cost
-                </label>
-                <span className='ml-4'>
-                    <Counter
-                        initialValue={quantity}
-                        onInc={incQuantity}
-                        onDec={decQuantity}
-                    />
-                </span>
+                <span className='mx-2 text-sm -rotate-90'>per</span>
+                <Dropdown
+                    options={[`piece`, `kg`, `liter`]}
+                    label='Entity'
+                    optionVal={optionVal}
+                    setOptionVal={setOptionVal}
+                    defaultOption='piece'
+                />
             </div>
+            <span className='flex-center justify-start h-10 w-full'>
+                <span className='mr-4'>Quantity:</span>
+                <Counter
+                    counter={quantity}
+                    setCounter={setQuantity}
+                    step={step(optionVal)[0]}
+                    precision={step(optionVal)[1]}
+                />
+            </span>
         </Modal>
     );
 };
