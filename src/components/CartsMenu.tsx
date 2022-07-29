@@ -10,41 +10,27 @@ import Header from './layouts/Header';
 import DndEditTools from './utils/DndEditTools';
 import Button from './utils/Button';
 import CartItem from './CartItem';
-import DroppablerDiv from './utils/DroppablerDiv';
+// import DroppablerDiv from './utils/DroppablerDiv';
+import DndTable from './utils/DndTable';
 
 import Tooltip from './utils/Tooltip';
+// import { Draggable, DraggableProvided } from 'react-beautiful-dnd';
+import { CartMenuColumnsFs } from '../enums/CartMenuColumns';
 
 const CartsMenu = () => {
     const [fs, setFs] = useState(false);
 
     const { pathname } = useLocation();
     useEffect(() => {
-        if ([`/`, `/create`].includes(pathname)) {
-            setFs(true);
-        } else {
-            setFs(false);
-        }
+        setFs([`/`, `/create`].includes(pathname));
     }, [pathname]);
 
     const [editingMode, setEditingMode] = useState(false);
 
     const { carts, cartsSeq } = useAppSelector(store => store.cart);
-    const HeadingRow = () => {
-        const cl = `text-slate-500 text-center w-60`;
-        return (
-            <span className='flex-center cursor-default text-sm justify-between mr-24 mb-1'>
-                <span className='text-slate-500 block ml-8'>Cart</span>
-                <span className='flex-center'>
-                    <span className={`${cl} block`}>Date Created</span>
-                    <span className={`${cl} lg:block hidden`}>
-                        Last Modified
-                    </span>
-                    <span className={`${cl} block w-24`}>Size</span>
-                </span>
-            </span>
-        );
-    };
+
     useUnloadCautionPrompt(editingMode);
+
     return (
         <div className='flex flex-col items-stretch h-full grow'>
             <Header>
@@ -74,28 +60,38 @@ const CartsMenu = () => {
                 </>
             </Header>
 
-            <DroppablerDiv
-                dispatchFunc={moveCart}
-                isDropDisabled={!editingMode}
-            >
-                {!cartsSeq.length ? (
-                    `You have no carts.`
-                ) : (
-                    <>
-                        {fs && <HeadingRow />}
-
+            {!cartsSeq.length ? (
+                `You have no Carts`
+            ) : (
+                <DndTable>
+                    <DndTable.Header
+                        columns={CartMenuColumnsFs as [string, number][]}
+                    />
+                    <DndTable.Body
+                        dispatchFn={moveCart}
+                        isDropDisabled={!editingMode}
+                    >
                         {cartsSeq.map((_id: string, i: number) => (
-                            <CartItem
+                            <DndTable.Row
                                 key={_id}
-                                cart={carts[_id]}
-                                index={i}
+                                draggableId={_id}
                                 dndDisabled={!editingMode}
-                                fs={fs}
-                            />
+                                index={i}
+                            >
+                                <CartItem
+                                    cart={carts[_id]}
+                                    dndDisabled={!editingMode}
+                                />
+                                {/* <DndTable.Data>ok</DndTable.Data>
+                                <DndTable.Data>{carts[_id].name}</DndTable.Data>
+                                <DndTable.Data>ok</DndTable.Data>
+                                <DndTable.Data>ok</DndTable.Data>
+                                <DndTable.Data>ok</DndTable.Data> */}
+                            </DndTable.Row>
                         ))}
-                    </>
-                )}
-            </DroppablerDiv>
+                    </DndTable.Body>
+                </DndTable>
+            )}
         </div>
     );
 };
